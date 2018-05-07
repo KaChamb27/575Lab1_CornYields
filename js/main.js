@@ -7,12 +7,12 @@ function createMap(){
     var mymap = L.map('mapid').setView([39.000, -97.000], 4);
     
     // add base tilelayer from http://leaflet-extras.github.io/leaflet-providers/preview/
-    // See Stamen.TonerBackground
-    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}.{ext}', {
+    // See Stamen.TerrainBackground
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	subdomains: 'abcd',
 	minZoom: 0,
-	maxZoom: 20,
+	maxZoom: 18,
 	ext: 'png'
     }).addTo(mymap);
     
@@ -112,25 +112,24 @@ function createPopup(properties, attribute, layer, radius){
     });
 };
 
-/*
 //Panel content
 function createPanel(properties, attribute, layer){
     var year = attribute.split("r")[1];
     //build panel content string
     var panelContent = "<p><b>Year:</b> " + year + "</p>";
     layer.on(panelContent);
-}; */
+}; 
         
 //Function to convert markers to circle markers
 function pointToLayer(feature, latlng, attributes){
     
-    //Step 4: Select attribute to visualize.
+    //Select attribute to visualize.
     var attribute = attributes[0];
     
-    //Step 5: For each feature, determine its value for the selected attribute
+    //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
     
-    //Step 6: Give each feature's circle marker a radius based on its attrbribute value
+    //Give each feature's circle marker a radius based on its attrbribute value
     markerOptions.radius = calcPropRadius(attValue);
     
     //create circle marker layer
@@ -144,9 +143,7 @@ function pointToLayer(feature, latlng, attributes){
     return layer;
 };
 
-
-
-//Step 3: Add circle markers to point features, called in getData.
+//Add circle markers to point features, called in getData.
 function createPropSymbols(mydata, mymap, attributes){  
     //create a leaflet geojson layer and add to map.
     L.geoJson(mydata, {
@@ -191,9 +188,6 @@ function createSequenceControls(mymap, attributes){
     
     mymap.addControl(new SequenceControl());
     
-    //create range input element (slider)
-    //$('#panel').append('<input class="range-slider" type="range">');
-    
     //set slider attributes
     $('.range-slider').attr({
         max: 9,
@@ -201,8 +195,6 @@ function createSequenceControls(mymap, attributes){
         value: 0,
         step: 1
     });
-    
-    
     
     //click listerner for buttons
     $('.skip').click(function(){
@@ -227,30 +219,26 @@ function createSequenceControls(mymap, attributes){
     });
 };
 
-
-//Menu function
+//Filter function
 function filterRank(mydata){
     //var geoObject = mydata.features;
-    var markers =[];
-    markers = mydata.features;
+    var markers = mydata.features;
     console.log(markers);
 
     $('.menu-ui a').on('click', function() {
-        console.log("here2");
         // For each filter link, get the 'data-filter' attribute value.
         var filter = $(this).data('filter');
         $(this).addClass('active').siblings().removeClass('active');
         
         markers.setFilter(function(f) {
-        // If the data-filter attribute is set to "all", return
-        // all (true). Otherwise, filter on markers that have
-        // a value set to true based on the filter name.
-            return (filter === 'all') ? true : f.properties[filter] === true
+            // If the data-filter attribute is set to "all", return
+            // all (true). Otherwise, filter on markers that have
+            // a value set to true based on the filter name.
+            return (filter === 'all') ? true : f.properties[filter] === true;
         });
-    return false;
+        return false;
     });
 };
-
 
 //Create legend
 function createLegend(mymap, attributes){
@@ -269,8 +257,6 @@ function createLegend(mymap, attributes){
     });
     mymap.addControl(new LegendControl());
 };
-
-//Step 2: Pull data from file.
 
 // Function to retrieve the data and place on map.
 function getData(mymap){
@@ -297,7 +283,4 @@ function getData(mymap){
     
 };
 
-
 $(document).ready(createMap);
-
-

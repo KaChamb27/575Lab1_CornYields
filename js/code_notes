@@ -41,6 +41,15 @@ L.tileLayer('https://api.mapbox.com/styles/v1/kachamb27/cjg4xuu5j1ckl2rqktungdnu
 	//ext: 'png'
     //}).addTo(mymap);
     */
+    
+// See Stamen.TonerBackground
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20,
+	ext: 'png'
+    }).addTo(mymap);
 
 /* Unused code from bottom of main.js
 
@@ -494,3 +503,50 @@ function getData(mymap){
         onEachFeature
     }}).addTo(mymap);
 };
+
+////
+/Filter code block from https://www.mapbox.com/mapbox.js/example/v1.0.0/markers-with-multiple-filters/
+
+//Menu function
+function filterRank(mydata){
+    //var geoObject = mydata.features;
+    var markers =[];
+    markers = mydata.features;
+    console.log(markers);
+
+    $('.menu-ui a').on('click', function() {
+        console.log("here2");
+        // For each filter link, get the 'data-filter' attribute value.
+        var filter = $(this).data('filter');
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        markers.setFilter(function(f) {
+        // If the data-filter attribute is set to "all", return
+        // all (true). Otherwise, filter on markers that have
+        // a value set to true based on the filter name.
+            console.log(f);
+            return (filter === 'all') ? true : f.properties[filter] === true;
+        });
+    return false;
+    });
+};
+///////////
+/Trying to get the filter to work...
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+/////////
+//Trying Search function...
+var search = L.layerGroup().addTo(mymap);
+mymap.addControl( new L.ControlSearch({layer: searchLayer}) );
+/////////
+//Map style
+#mapid { 
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+//////////
+//Puts slider below map
+    //create range input element (slider)
+    //$('#panel').append('<input class="range-slider" type="range">');
+//////
