@@ -67,6 +67,9 @@ function updatePropSymbols(mymap, attribute){
             createPopup(props, attribute, layer, radius);
             //create panel
             //createPanel(props, attribute, layer);
+            //Create temporal legend
+            createLegend(mymap, attribute);
+            updateLegend(mymap, attribute);
         };
     });
 };
@@ -88,7 +91,7 @@ function createPopup(properties, attribute, layer, radius){
     var popupContent = "<p><b>State:</b> " + properties.StateName + "</p>";
     
     //add formatted attribute to panel content string
-    var year = attribute.split("r")[1];
+    window.year = attribute.split("r")[1];
     popupContent += "<p><b>Avg. Yield in " + year + ":</b>" + properties[attribute] + " bu/ac</p>";
     
     //replace the layer popup
@@ -111,34 +114,30 @@ function createPopup(properties, attribute, layer, radius){
         },
     });
 };
-
+/*
 //Panel content
 function createPanel(properties, attribute, layer){
     var year = attribute.split("r")[1];
     //build panel content string
     var panelContent = "<p><b>Year:</b> " + year + "</p>";
-    layer.on(panelContent);
-}; 
+    layer.on({click: function(){$("#panel").html(panelContent);}
+    });
+}; */
         
 //Function to convert markers to circle markers
 function pointToLayer(feature, latlng, attributes){
     
     //Select attribute to visualize.
     var attribute = attributes[0];
-    
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
-    
     //Give each feature's circle marker a radius based on its attrbribute value
     markerOptions.radius = calcPropRadius(attValue);
-    
     //create circle marker layer
     var layer = L.circleMarker(latlng, markerOptions);
-    
     //var props = layer.feature.properties;
     //create popup
     createPopup(feature.properties, attribute, layer, markerOptions.radius);
-
     //return the circle marker to the L.geoJson pointToLayer option
     return layer;
 };
@@ -163,18 +162,14 @@ function createSequenceControls(mymap, attributes){
         onAdd: function(mymap) {
             //create the control container div with a particular class name
             var container = L.DomUtil.create('div', 'sequence-control-container');
-            
             //move slider into onAdd
             $(container).append('<input class="range-slider" type="range">');
-            
             //add skip buttons
-            $(container).append('<button class="skip" id="reverse"title="Reverse">Back</button>'); 
-            $(container).append('<button class="skip" id="forward"title="Forward">Skip</button>'); 
-            
+            $(container).append('<button class="skip" id="reverse">Back</button>'); 
+            $(container).append('<button class="skip" id="forward">Skip</button>'); 
             //replace button content with images
-            $('#reverse').html('<img src="img/reversearrow.png">');
-            $('#forward').html('<img src="img/forwardarrow.png">');
-            
+            $('#reverse').html('<img src="img/REVarrow.png">');
+            $('#forward').html('<img src="img/FORarrow.png">');
             //kill any mouse event listeners on the map
             $(container).on('mousedown dblclick', function(e){
                 L.DomEvent.stopPropagation(e);
@@ -203,12 +198,14 @@ function createSequenceControls(mymap, attributes){
         //increment or decrement depending on button clicked
         if ($(this).attr('id') == 'forward'){
             index++;
+            console.log(index);
             //if past the last attribute, wrap around to first attribute
             index = index > 9 ? 0 : index;
             //pass new attribute to update symbols
             updatePropSymbols(mymap, attributes[index]);
         } else if ($(this).attr('id') == 'reverse'){
             index--;
+            console.log(index);
             //if past the first attribute, wrap around to last attribute
             index = index < 0 ? 9 : index;
             //pass new attribute to update symbols
@@ -251,11 +248,75 @@ function createLegend(mymap, attributes){
             var container = L.DomUtil.create('div', 'legend-control-container');
             //Create temporal legend
             $(container).append('<div id="temporal-legend">');
+            //Add temporal legend text
+            //$(container).html('<p><b>Avg. Yield in </b></p>'+ year);
+            
+            //Add attribute legend svg string
+            var svg = '<svg id="attribute-legend" width="160px" height="60px">';
+            var circles = ["max", "mean", "min"];
+            for (var i=0; i<circles.length; i++){
+                svg+= '<circle class="legend-circle" id="'+ circles[i]+
+                    '" fill="#FAF357" fill-opacity="0.8" stroke="#ECD12C" cx="30" cy="90" r="89.5"/>';
+            };
+            svg+="</svg>";
+            //add attribute legend scg to container
+            $(container).append(svg);
             
             return container;
         }
     });
     mymap.addControl(new LegendControl());
+    updateLegend(mymap, attributes[0]); //<--Probably the stuff I did for message/year
+};
+
+//Calculate max, mean, min values for attribute
+function getCircleValues(mymap, attribute){
+    //Min highest and max lowest possible
+    var min = Infinity,
+        max = -Infinity;
+    
+    mymap.eachLayer(function(layer){
+        //get attribute
+        if (layer.feature){
+            var attributeValue = Number(layer.feature.properties[attribute]);
+            //test for min
+            if (attributeValue <min){
+                min = attributeValue;
+            };
+            //test for max
+            if (attributeValue>max){
+                max=attributeValue;
+            };
+        };
+    });
+    //set mean
+    var mean = (max + min)/2;
+    //return values as object
+    return {
+        max: max,
+        mean: mean,
+        min: min
+    };
+};
+
+//Update legend with attribute
+function updateLegend(mymap, attribute){
+    //content text
+    var year = attribute.split("yr")[1];
+    var content = "Avg. Yield in " + year;
+    //replace legend content
+    $('#temporal-legend').html(content);
+    //get max,mean,min values
+    var circleValues = getCircleValues(mymap, attribute);
+    for (var key in circleValues){
+        //get radius
+        var radius = calcPropRadius(circleValues[key]);
+        //assign cy and r attributes
+        $('#'+key).attr({
+            cy:59-radius,
+            r: radius
+        });
+    };
 };
 
 // Function to retrieve the data and place on map.
