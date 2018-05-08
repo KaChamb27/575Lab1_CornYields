@@ -50,6 +50,15 @@ L.tileLayer('https://api.mapbox.com/styles/v1/kachamb27/cjg4xuu5j1ckl2rqktungdnu
 	maxZoom: 20,
 	ext: 'png'
     }).addTo(mymap);
+    
+// See Stamen.TerrainBackground
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 18,
+	ext: 'png'
+    }).addTo(mymap);
 
 /* Unused code from bottom of main.js
 

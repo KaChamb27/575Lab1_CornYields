@@ -7,13 +7,11 @@ function createMap(){
     var mymap = L.map('mapid').setView([39.000, -97.000], 4);
     
     // add base tilelayer from http://leaflet-extras.github.io/leaflet-providers/preview/
-    // See Stamen.TerrainBackground
-    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-	subdomains: 'abcd',
-	minZoom: 0,
-	maxZoom: 18,
-	ext: 'png'
+    //See CartoDB.PositronNoLabels
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
     }).addTo(mymap);
     
     //call getData function to get feature data. Go to Step 2.
@@ -248,15 +246,18 @@ function createLegend(mymap, attributes){
             var container = L.DomUtil.create('div', 'legend-control-container');
             //Create temporal legend
             $(container).append('<div id="temporal-legend">');
-            //Add temporal legend text
-            //$(container).html('<p><b>Avg. Yield in </b></p>'+ year);
             
             //Add attribute legend svg string
-            var svg = '<svg id="attribute-legend" width="160px" height="60px">';
-            var circles = ["max", "mean", "min"];
-            for (var i=0; i<circles.length; i++){
-                svg+= '<circle class="legend-circle" id="'+ circles[i]+
+            var svg = '<svg id="attribute-legend" width="160px" height="60px" position="bottom">';
+            var circles = {
+                max: 20,
+                mean: 40,
+                min: 60
+            };
+            for (var circle in circles){
+                svg+= '<circle class="legend-circle" id="'+ circle+
                     '" fill="#FAF357" fill-opacity="0.8" stroke="#ECD12C" cx="30" cy="90" r="89.5"/>';
+                svg+= '<text id="'+circle+'-text" x="65" y="'+circles[circle]+'"></text>';
             };
             svg+="</svg>";
             //add attribute legend scg to container
@@ -266,7 +267,7 @@ function createLegend(mymap, attributes){
         }
     });
     mymap.addControl(new LegendControl());
-    updateLegend(mymap, attributes[0]); //<--Probably the stuff I did for message/year
+    updateLegend(mymap, attributes[0]);
 };
 
 //Calculate max, mean, min values for attribute
@@ -316,6 +317,8 @@ function updateLegend(mymap, attribute){
             cy:59-radius,
             r: radius
         });
+        //add legend text
+        $('#'+key+'-text').text(Math.round(circleValues[key])+" bu/ac");
     };
 };
 
