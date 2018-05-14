@@ -559,3 +559,11 @@ mymap.addControl( new L.ControlSearch({layer: searchLayer}) );
     //create range input element (slider)
     //$('#panel').append('<input class="range-slider" type="range">');
 //////
+//.setFilter
+markers.setFilter(function(f) {
+            // If the data-filter attribute is set to "all", return
+            // all (true). Otherwise, filter on markers that have
+            // a value set to true based on the filter name.
+            return (filter === 'all') ? true : f.properties[filter] === true;
+        });
+///////

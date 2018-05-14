@@ -222,7 +222,7 @@ function filterRank(mydata){
 
     $('.menu-ui a').on('click', function() {
         // For each filter link, get the 'data-filter' attribute value.
-        var filter = $(this).data('filter');
+        var setFilter = $(this).data('filter');
         $(this).addClass('active').siblings().removeClass('active');
         
         markers.setFilter(function(f) {
