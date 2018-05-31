@@ -22,7 +22,7 @@
     </head>
 
 	<body>
-        <h1>Average Corn Yield per state</h1>
+        <div id="title"><h1>Average Corn Yield per state</h1></div>
         
         <nav class='menu-ui'>
             <a href='#' class='active' data-filter='all'>Show all</a>
@@ -31,7 +31,8 @@
             <a href='#' data-filter='top15'>Top 15</a>
         </nav>
         
-        <div id="mapid" style="height: 500px;"></div>
+        <div id="mapid"></div>
+        
         <div id="temporal-legend"></div>
         <div id="panel"></div>
         
@@ -41,10 +42,9 @@
             <br>Converted csv to geojson: http://geojson.io </p>
         
         <!File links>
-        <script src="js/jquery.js"></script>
+        <script src="js/jquery-1.11.0.min.js"></script>
         <script src="lib/leaflet/leaflet.js"></script>
         <script src="lib/mapbox.js-bower-3.1.1/mapbox.js"></script>
-        <!script src="js/geojson_corn.js"><!/script>
         <script src="js/main.js"></script>
         
     </body>

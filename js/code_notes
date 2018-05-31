@@ -567,3 +567,27 @@ markers.setFilter(function(f) {
             return (filter === 'all') ? true : f.properties[filter] === true;
         });
 ///////
+markers.setFilter(function(f) {
+            // If the data-filter attribute is set to "all", return
+            // all (true). Otherwise, filter on markers that have
+            // a value set to true based on the filter name.
+            return (filter === 'all') ? true : f.properties[filter] === true;
+        });
+        return false;
+        
+////
+$('.menu-ui a').on('click', function() {
+        // For each filter link, get the 'data-filter' attribute value.
+        var filter = $(this).data('filter');
+        $(this).addClass('active').siblings().removeClass('active');
+        try{
+            if ($(this).data('filter')=== 'top5'){$(this).filter(function(markers){
+                console.log("in top5");
+                console.log(markers.properties("top5"));
+                return $("[top5=TRUE]").addClass('active');
+            });}
+            else if ($(this).data('filter')=== 'top10'){index=== 2;}
+            else if ($(this).data('filter')=== 'top15'){index === 3;}
+            else {index === 0;}
+        } catch (err){console.log("didn't work");};
+    });

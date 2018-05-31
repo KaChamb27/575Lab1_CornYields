@@ -1,26 +1,9 @@
 
-#title {
-    position: absolute;
-    z-index: 3;
-    background-color: #ecd12c;
-}
-h1{
-    color: black;
-    font-family: sans-serif;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-p {
-    font-family: sans-serif;
-    position: absolute;
-    padding-top: 80vh;
-    z-index: 2;
-}
 
 #mapid { 
-    height: 100vh;
-    z-index: 1;
+    height: 400px;
+    width: 100%;
+    display: inline-block;
 }
 
 #panel {
@@ -35,7 +18,6 @@ p {
 }
 
 .sequence-control-container {
-    padding-bottom: 100px;
     width: 350px;
     height: 30px;
     background-color: rgba(255,255,255,0.8);
@@ -46,8 +28,8 @@ p {
 }
 
 .legend-control-container {
-    width: 200px;
-    padding: 2px;
+    width: 40px;
+    padding: 20px;
     text-align: center;
     fill color: azure;
 }
@@ -74,13 +56,12 @@ p {
   background:#fff;
   position:absolute;
   top:10px;right:10px;
-  z-index:2;
+  z-index:1;
   border-radius:3px;
   width:120px;
   border:1px solid rgba(0,0,0,0.4);
   }
   .menu-ui a {
-      font-family: sans-serif;
     font-size:13px;
     color:#404040;
     display:block;
@@ -103,6 +84,6 @@ p {
       }
     .menu-ui a.active,
     .menu-ui a.active:hover {
-      background:#ecd12c;
-      color:black;
+      background:#3887BE;
+      color:#FFF;
       }

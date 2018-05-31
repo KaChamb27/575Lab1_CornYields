@@ -32,7 +32,6 @@ function processData(mydata){
             attributes.push(attribute);
         };
     };
-    
     return attributes;
 };
 
@@ -216,22 +215,25 @@ function createSequenceControls(mymap, attributes){
 
 //Filter function
 function filterRank(mydata){
-    //var geoObject = mydata.features;
     var markers = mydata.features;
-    console.log(markers);
+    //var filterArray = ["all", "top5", "top10", "top15"]
+    //console.log(markers);
+    //console.log(filterArray);
 
     $('.menu-ui a').on('click', function() {
         // For each filter link, get the 'data-filter' attribute value.
-        var setFilter = $(this).data('filter');
+        var filter = $(this).data('filter');
         $(this).addClass('active').siblings().removeClass('active');
-        
-        markers.setFilter(function(f) {
-            // If the data-filter attribute is set to "all", return
-            // all (true). Otherwise, filter on markers that have
-            // a value set to true based on the filter name.
-            return (filter === 'all') ? true : f.properties[filter] === true;
-        });
-        return false;
+        try{
+            markers.setFilter(function(f){
+                console.log("in setFilter");
+                return (filter === 'all') ? true : f.properties[filter] === true;
+            });
+            return false;
+            //else if ($(this).data('filter')=== 'top10'){index=== 2;}
+            //else if ($(this).data('filter')=== 'top15'){index === 3;}
+            //else {index === 0;}
+        } catch (err){console.log("didn't work");};
     });
 };
 
