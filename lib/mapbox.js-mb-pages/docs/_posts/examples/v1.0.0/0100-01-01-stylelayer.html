@@ -1,0 +1,20 @@
+---
+layout: example
+categories: example/v1.0.0
+version: v1.0.0
+title: Add styles made with Mapbox Studio using styleLayer
+description: Display a style created in Mapbox Studio
+tags:
+  - layers
+---
+<div id='map'></div>
+
+<script>
+var map = L.mapbox.map('map')
+    .setView([38.97416, -95.23252], 15);
+
+// Add tiles from the Mapbox Static API tiles endpoint
+// (https://www.mapbox.com/api-documentation/#retrieve-raster-tiles-from-styles)
+// Tiles are 512x512 pixels and are offset by 1 zoom level
+L.mapbox.styleLayer('mapbox://styles/mapbox/emerald-v8').addTo(map);
+</script>
